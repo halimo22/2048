@@ -8,11 +8,15 @@ if command -v apt-get >/dev/null 2>&1; then
     sudo apt-get update
     sudo apt-get install -y nginx
     WEB_ROOT=/var/www/html
+elif command -v dnf >/dev/null 2>&1 || command -v yum >/dev/null 2>&1; then
+    PKG=$(command -v dnf || command -v yum)
+    sudo "$PKG" install -y nginx
+    WEB_ROOT=/usr/share/nginx/html
 elif command -v brew >/dev/null 2>&1; then
     brew install nginx
     WEB_ROOT="$(brew --prefix nginx)/html"
 else
-    echo "No supported package manager (apt-get or brew) found." >&2
+    echo "No supported package manager (apt-get, dnf/yum, or brew) found." >&2
     exit 1
 fi
 
